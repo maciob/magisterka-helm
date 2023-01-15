@@ -11,5 +11,10 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    - port: 443
+      targetPort: 443
+      protocol: TCP
+      name: https
+
   selector:
     {{- include "frontend.selectorLabels" . | nindent 4 }}
