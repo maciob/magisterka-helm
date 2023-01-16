@@ -43,7 +43,7 @@ service:
 ingress:
   enabled: true
   # className: "nginx"
-  annotations: {}
+  annotations:
     external-dns.alpha.kubernetes.io/hostname: maciej-bekas.click
     cert-manager.io/issuer: "letsencrypt"
     kubernetes.io/ingress.class: nginx
