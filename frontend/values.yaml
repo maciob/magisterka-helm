@@ -50,7 +50,7 @@ ingress:
     kubernetes.io/tls-acme: "true"
     # acme.cert-manager.io/http01-ingress-class: nginx
     acme.cert-manager.io/http01-edit-in-place: "true"
-    # cert-manager.io/issue-temporary-certificate: "false"
+    cert-manager.io/issue-temporary-certificate: "false"
   hosts:
     - host: maciej-bekas.click
       paths:
