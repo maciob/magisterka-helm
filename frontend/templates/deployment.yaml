@@ -40,6 +40,20 @@ spec:
             - name: https
               containerPort: 443
               protocol: TCP
+          command: ["/bin/sh","-c","export BACKEND_SERVICE && export ADDRESS && envsubst '$${BACKEND_SERVICE} $${ADDRESS}' < /etc/nginx/templates/nginx.conf.template > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"]
+          env:
+          - name: BACKEND_SERVICE
+            value: "BACKEND"
+            # valueFrom:
+            #   secretKeyRef:
+            #     name: {{ .Values.configName }}
+            #     key: BACKEND_SERVICE
+          - name: ADDRESS
+            value: "BACKEND"
+            # valueFrom:
+            #   secretKeyRef:
+            #     name: {{ .Values.configName }}
+            #     key: ADDRESS
 
           livenessProbe:
             httpGet:
