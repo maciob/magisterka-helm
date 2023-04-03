@@ -1,13 +1,8 @@
-# Default values for frontend.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-replicaCount: 1
+replicaCount: 3
 
 image:
   repository: 183444901630.dkr.ecr.eu-west-1.amazonaws.com/magisterka-front
   pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
 
 imagePullSecrets: []
@@ -15,63 +10,38 @@ nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
   name: ""
 
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroup: 2000
 
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 service:
-  type: ClusterIP
-  port: 80
+  type: NodePort
+  port: 443
 
 ingress:
   enabled: true
-  # className: "nginx"
+  className: alb
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: "maciej-bekas.click"
-    cert-manager.io/issuer: "letsencrypt"
-    kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: "true"
-    # acme.cert-manager.io/http01-ingress-class: nginx
-    acme.cert-manager.io/http01-edit-in-place: "true"
-    cert-manager.io/issue-temporary-certificate: "false"
+    external-dns.alpha.kubernetes.io/hostname: "hostname"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+    alb.ingress.kubernetes.io/certificate-arn: "arn"
   hosts:
-    - host: maciej-bekas.click
+    - host: "maciej-bekas.click"
       paths:
         - path: /
-          pathType: ImplementationSpecific
-  tls: 
-   - secretName: magisterka
-     hosts:
-       - maciej-bekas.click
+          pathType: Prefix
+  tls:
+    - hosts:
+        - "maciej-bekas.click"
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
 
 autoscaling:
   enabled: false
@@ -85,3 +55,11 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+global:
+  backend: "backend"
+  front_url: "front_url"
+  connectionstring: "connectionstring"
+  mail_login: "mail_login"
+  mail_password: "mail_password"
+  cert_arn: "arn"

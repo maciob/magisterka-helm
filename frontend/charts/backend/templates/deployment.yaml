@@ -39,14 +39,36 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /weatherforecast
+              path: /api/User/check
               port: http
           readinessProbe:
             httpGet:
-              path: /weatherforecast
+              path: /api/User/check
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: MyApp_FrontURL
+            value: {{ .Values.global.front_url}}
+            # valueFrom:
+            #   secretKeyRef:
+            #     name: {{ .Values.configName }}
+            #     key: BACKEND_SERVICE
+          - name: MyAppDatabase_ConnectionString
+            value: {{ .Values.global.connectionstring}}
+
+          - name: MyApp_Login
+            value: {{ .Values.global.mail_login}}
+            
+          - name: MyApp_Password
+            value: {{ .Values.global.mail_password}}
+
+            # valueFrom:
+            #   secretKeyRef:
+            #     name: {{ .Values.configName }}
+            #     key: ADDRESS
+
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
