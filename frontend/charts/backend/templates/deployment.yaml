@@ -63,6 +63,12 @@ spec:
           - name: MyApp_Password
             value: {{ .Values.global.mail_password}}
 
+          - name: MyApp_FIDO_API_SECRET
+            value: {{ .Values.global.fido_secret}}
+
+          - name: MyApp_Mode
+            value: "{{ .Values.global.mode}}"
+
             # valueFrom:
             #   secretKeyRef:
             #     name: {{ .Values.configName }}
